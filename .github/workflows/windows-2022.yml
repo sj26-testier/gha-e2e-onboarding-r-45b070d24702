@@ -1,0 +1,23 @@
+name: Windows 2022 installed baseline
+on:
+  push:
+    branches: [lab/r-45b070d24702]
+permissions:
+  contents: read
+jobs:
+  inventory:
+    name: Windows 2022 installed baseline
+    runs-on: windows-2022
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Collect installed baseline without setup
+        shell: powershell
+        run: ./.lab/inventory/run.ps1 -Cell windows-2022
+      - name: Retain collector evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        continue-on-error: true
+        with:
+          name: windows-2022-inventory
+          path: inventory-evidence
+          retention-days: 7
